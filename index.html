@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhishek Chaudhary - Software Engineering Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Summary: Text block. Goal: Quick overview. Interaction: None. Justification: Standard resume practice.
+        - Skills: Categorized lists with Tailwind badges. Goal: Showcase technical breadth. Interaction: Hover effects. Justification: Visually appealing and organized.
+        - Experience: Chronological list with accordion-style expandable details for each role. Goal: Detail career progression and achievements. Interaction: Click to expand/collapse. Quantifiable achievements emphasized. Justification: Allows for detailed information without overwhelming the initial view.
+        - Experience Timeline (Chart.js): Horizontal bar chart. Goal: Visual overview of career timeline. Interaction: None for this version, purely visual. Justification: Enhances visual appeal. Library: Chart.js (Canvas).
+        - Education/Certs/Trainings/Hackathons: Structured lists. Goal: Provide supporting credentials. Interaction: None. Justification: Clear and concise presentation.
+        - All textual content directly from the resume. No SVG/Mermaid used. All charts via Chart.js on Canvas. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Tailwind's default sans-serif stack often includes Inter */
+        }
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for a cleaner look (optional) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8; /* sky-500 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9; /* sky-600 */
+        }
+        .timeline-chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* max-w-4xl */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* h-72 */
+            max-height: 350px; /* Consistent with prompt example */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .timeline-chart-container {
+                height: 350px; /* h-80 from prompt example */
+            }
+        }
+        .achievement {
+            font-weight: 600;
+            color: #b45309; /* amber-700, slightly darker than planned for better contrast */
+        }
+        .section-title {
+            border-bottom: 2px solid #0ea5e9; /* sky-600 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #0ea5e9; /* sky-600 */
+            border-bottom-color: #0ea5e9; /* sky-600 */
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 2000px; /* Adjust as needed, should be larger than any possible content */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 id="headerName" class="text-2xl font-bold text-sky-600">Abhishek Chaudhary</h1>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#summary" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Summary</a>
+                    <a href="#skills" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Skills</a>
+                    <a href="#experience" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Experience</a>
+                    <a href="#education" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Education</a>
+                    <a href="#certifications" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Certs & Training</a>
+                    <a href="#hackathons" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Hackathons</a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobileMenuButton" class="text-slate-600 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#summary" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Summary</a>
+                <a href="#skills" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Skills</a>
+                <a href="#experience" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Experience</a>
+                <a href="#education" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Education</a>
+                <a href="#certifications" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Certs & Training</a>
+                <a href="#hackathons" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Hackathons</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section id="contact" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+             <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-sm text-slate-700">
+                <a id="contactEmail" href="#" class="hover:text-sky-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" /><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg><span></span></a>
+                <span id="contactPhone" class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5h-1.528a13.501 13.501 0 01-11.41-11.41A1.5 1.5 0 013.5 2H5a1.5 1.5 0 011.5 1.5v.049c0 .331-.079.658-.228.944l-.359.687a.75.75 0 00.08.882A10.042 10.042 0 008.882 10.92a.75.75 0 00.882.08l.687-.359A1.492 1.492 0 0111.951 11H12A1.5 1.5 0 0113.5 12.5v1.5A1.5 1.5 0 0112 15.5h-.049c-.331 0-.658.079-.944.228l-.687.359a.75.75 0 00-.08.882 10.042 10.042 0 004.081 4.081.75.75 0 00.882-.08l.359-.687A1.492 1.492 0 0115.5 20h.049A1.5 1.5 0 0117 18.5v-1.5a1.5 1.5 0 01-1.5-1.5h-1.528a13.501 13.501 0 01-11.41-11.41A1.5 1.5 0 013.5 2H5a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5h-1.528a13.501 13.501 0 01-11.41-11.41A1.5 1.5 0 013.5 2H5a1.5 1.5 0 011.5 1.5V3.5z" clip-rule="evenodd" /></svg><span></span></span>
+                <a id="contactLinkedin" href="#" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.206v4.249H8.014V8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 7.435a1.426 1.426 0 100-2.852 1.426 1.426 0 000 2.852zm1.282 8.903H3.723V8.59h2.564v7.748zM17.638 2H2.363A1.362 1.362 0 001 3.362v13.276A1.362 1.362 0 002.363 18h15.275A1.362 1.362 0 0019 16.638V3.362A1.362 1.362 0 0017.638 2z" clip-rule="evenodd" /></svg><span></span></a>
+                <span id="contactLocation" class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.145l.005-.002.007-.004.012-.007a7.032 7.032 0 00.22-.165l.003-.002.003-.002.002-.001a5.016 5.016 0 00.97-.834l.008-.007c.15-.148.291-.302.418-.462l.012-.016.007-.008.004-.005.002-.002a3.496 3.496 0 00.488-.694l.002-.003.001-.002A2.25 2.25 0 0015 13.25V8.5a5 5 0 00-10 0v4.75c0 .623.213 1.2.586 1.69l.001.002.002.003c.164.247.353.465.558.655l.003.003.002.002.001.001a5.016 5.016 0 00.97.834l.008-.007a13.39 13.39 0 00.418.462l.012.016.007.008.004.005.002.002c.158.19.326.37.508.533l.002.002a5.741 5.741 0 00.28.145l.005.002.007.004.012.007a7.032 7.032 0 00.221.165l.003.002.003.002.002.001c.004.002.009.003.013.005h.001zM10 11.25a2.75 2.75 0 100-5.5 2.75 2.75 0 000 5.5z" clip-rule="evenodd" /></svg><span></span></span>
+            </div>
+        </section>
+
+        <section id="summary" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-sky-600 section-title">Summary</h2>
+            <p class="text-slate-700 leading-relaxed">A brief overview of my professional background and key strengths.</p>
+            <p id="summaryContent" class="mt-4 text-slate-700 leading-relaxed"></p>
+        </section>
+
+        <section id="skills" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-sky-600 section-title">Skills</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">A categorized list of my technical and leadership competencies.</p>
+            <div id="skillsContent" class="space-y-6"></div>
+        </section>
+
+        <section id="experience" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-sky-600 section-title">Professional Experience</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">A detailed account of my professional journey, highlighting key responsibilities and achievements in each role.</p>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-slate-700 mb-4 text-center">Career Timeline</h3>
+                <div class="timeline-chart-container bg-slate-50 p-4 rounded-lg shadow-inner">
+                    <canvas id="experienceTimelineChart"></canvas>
+                </div>
+            </div>
+            
+            <div id="experienceContent" class="space-y-8"></div>
+        </section>
+
+        <section id="education" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-sky-600 section-title">Education</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">My academic background and professional certifications.</p>
+            <div id="educationContent" class="space-y-4"></div>
+        </section>
+
+        <section id="certifications" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-sky-600 section-title">Certifications & Trainings</h2>
+             <p class="text-slate-700 leading-relaxed mb-6">Key certifications and professional development programs completed.</p>
+            <div id="certificationsContent" class="mb-6 space-y-2"></div>
+            <div id="trainingsContent" class="space-y-4"></div>
+        </section>
+
+        <section id="hackathons" class="p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-sky-600 section-title">Hackathons</h2>
+            <p class="text-slate-700 leading-relaxed mb-6">Further learning initiatives and practical application of skills in competitive environments.</p>
+            <div id="hackathonsContent" class="space-y-4"></div>
+        </section>
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 text-sm">
+        <p>&copy; <span id="currentYear"></span> Abhishek Chaudhary. Interactive Resume.</p>
+    </footer>
+
+    <script>
+        const resumeData = {
+            name: "Abhishek Chaudhary",
+            contact: {
+                email: "ab.chaudhary@outlook.com",
+                phone: "+1-925-967-6604",
+                linkedin: "https://linkedin.com/in/abhishek-n-chaudhary",
+                location: "San Francisco Bay Area"
+            },
+            summary: "Highly accomplished and results-oriented Software Engineering Manager with 14 years of progressive experience in leading, managing, and delivering large-scale, cloud-native, and distributed software solutions. Proven ability to drive strategic technical roadmaps, foster high-performance teams, and translate complex technical concepts into actionable business strategies. Expert in Object-Oriented Programming (Java, Spring Boot, RESTful APIs), Microservices architecture, and Agile methodologies. Passionate about building secure, scalable, and user-centric solutions across E-Commerce, Personalization, IoT, and Supply Chain domains, aligning with Mastercard's commitment to secure, simple, and accessible digital payments.",
+            skills: [
+                { category: "Programming Languages & Frameworks", items: ["Java 11 (Advanced)", "Spring Boot", "Python 3", "Node 20", "NestJS", "React", "Typescript", "Vue"] },
+                { category: "APIs & Architecture", items: ["Microservices", "REST", "GraphQL", "API Gateways", "OAuth 2.0", "mTLS", "Protobuf", "Caching", "MuleSoft", "Workato"] },
+                { category: "Cloud Platforms (Advanced)", items: ["AWS (MSK, Lambda, State Machine, ALB, S3, ECS/EKS, Batch, SNS/SQS, IAM, Pinpoint, Secrets & Config Manager, Cloudwatch, EMR + Glue, Kinesis)", "GCP", "Azure"] },
+                { category: "Databases", items: ["Relational (Postgres, MySQL, Oracle)", "NoSQL (Cassandra, MongoDB)", "Analytical (Redshift)"] },
+                { category: "Big Data & Streaming", items: ["Spark", "Kafka", "AMQP", "MQTT", "Airflow", "RabbitMQ", "HUDI"] },
+                { category: "DevOps & CI/CD", items: ["Docker", "Shell Scripting", "GIT", "Jenkins"] },
+                { category: "Leadership & Management", items: ["Strategic Planning", "Budget & Financial Management", "Talent Development & Mentoring", "Performance Management", "Cross-functional Collaboration", "Executive Presentations", "Agile Methodologies (SAFe® trained)"] },
+                { category: "Analytics & AI/ML", items: ["Productionizing Models", "EDA", "Recommendation Engines", "BI Tools (MicroStrategy + Java SDK)", "A/B Testing"] }
+            ],
+            experience: [
+                {
+                    company: "Lucid Motors",
+                    title: "FullStack Software Development Manager, Supply Chain Org",
+                    location: "Newark, California",
+                    dates: "June 2024 – Current",
+                    responsibilities: [
+                        "Led and managed Lucid's flagship supply chain program, optimizing parts management and supplier onboarding for the entire fleet, ensuring seamless operational continuity.",
+                        "Grew core development team by **over 100% in under 3 months**, overseeing hiring, onboarding, comprehensive training, career growth, and promotions to build a high-performance unit.",
+                        "Delivered scalable, event-driven, and loosely coupled solutions using React JS, Nest JS, Java, Python, MongoDB, and the AWS cloud stack.",
+                        "Designed and implemented metadata-driven schema handling, eliminating hard-coded data structures and **reducing operational costs by over $1M annually**.",
+                        "Enabled scalable content reuse and digital experience components by externalizing application content to a CMS, **cutting operational costs by over $2M annually**.",
+                        "Optimized the supplier RFQ process, evaluating and comparing LightSource vs. Coupa, and collaborating with architects across security, IT infrastructure, and integrations. Drove decisions that **cut supplier onboarding time by 30%**.",
+                        "Managed AWS-based API and Lambda integrations, implementing CloudWatch logging and API Gateway security enhancements, **reducing security vulnerabilities by 50%**.",
+                        "Enabled real-time data synchronization between 3DX, MongoDB, and Redshift, ensuring **100% data consistency** across critical supply chain applications.",
+                        "Orchestrated migration of supply chain jobs to Apache Airflow, significantly improving data pipeline reliability and visibility, resulting in a **25% reduction in system downtime**.",
+                        "Drove AG Grid enhancements, implementing a change log feature to track supplier updates while **reducing performance bottlenecks for bulk data operations by 2x**.",
+                        "Led design efforts to migrate Lucid API endpoints from legacy middleware to Workato, simplifying and streamlining API management.",
+                        "Collaborated closely with directors and leadership to establish technical roadmaps and processes that promote a healthy, efficient, and high-performing work culture."
+                    ]
+                },
+                {
+                    company: "Levi Strauss & Co (Levi's)",
+                    title: "Software Development Manager, E-Commerce Org",
+                    location: "San Francisco, California",
+                    dates: "December 2019 – May 2024",
+                    responsibilities: [
+                        "Managed and led flagship E-Commerce projects, including levi.com personalized browse experience and a loyalty/revenue optimization program, contributing to an **improvement in e-commerce revenue by 30%** with combined program costs exceeding **$10 million**.",
+                        "Designed composable system architecture for levi.com browse experience, utilizing a personalization engine that resulted in a **7% increase in revenue**.",
+                        "Designed and implemented core microservices (product, pricing, inventory, loyalty service), enabling faster go-to-market, ease of scaling, and increased revenue by transitioning away from legacy monoliths.",
+                        "Designed and implemented near real-time inventory and pricing data ingestion pipelines using Kafka and Spark, and lakehouse solutions with Spark and HUDI for data-lake transactionality, supporting cross-functional teams (Data Science, Reporting).",
+                        "Built custom Kafka producers and consumers and managed pre-built Kafka connectors via Kafka Connect APIs, establishing robust data ingestion pipelines for microservices.",
+                        "Implemented robust SSO, authentication, and authorization using OAuth 2.0 workflows for UI-API and API-API communication, and mTLS for data encryption between Kafka clients and brokers, ensuring high security standards.",
+                        "Built scalable, distributed, and secure systems capable of handling peak shopping events like Black Friday & Cyber Monday, where APIs received **100M+ requests/day**.",
+                        "Designed and implemented email & SMS notification services for order-shipment delay and BOPIS use cases, leveraging Oracle Responsys and AWS Pinpoint.",
+                        "Built data ingestion pipelines to consume data from MS-SQL server into AWS Redshift via Spark (EMR), Glue Catalog, and Hudi.",
+                        "Managed a diverse and globally distributed team of FTEs and consultants, fostering a no-blame culture that significantly improved collaboration and team performance.",
+                        "Collaborated with directors and leadership to establish technical roadmaps and processes that promote a healthy and efficient work culture.",
+                        "Built strong partnerships with cross-functional teams including Operations, Data Scientists, Machine Learning Engineers, Business, Product Owners, Quality Leads, and Senior Managers throughout the product lifecycle.",
+                        "Managed and reviewed team performance, providing mentorship and guiding engineers through their career development and growth paths.",
+                        "Delivered full-stack projects encompassing backend, AI/ML, and frontend development; actively involved in code reviews and maintaining code standards.",
+                        "Evaluated and identified API management portals for establishing an API marketplace for internal and external API customers.",
+                        "Built comprehensive monitoring utilities and dashboards in AWS using CloudWatch log insights, queries, metrics, and alarms to ensure application performance.",
+                        "Developed a configuration-driven alert framework to send Slack/email alerts on critical and noisy errors for a suite of **100+ applications**.",
+                        "Utilized Adobe TnT for A/B tests to evaluate the performance of control and test experiences based on key KPIs such as RPV, CTR, and AOV.",
+                        "Architected and developed a margin optimization engine (EBIT+Routing) and an omnichannel Loyalty program generating **multi-million dollars in revenue**.",
+                        "Self-educated, skilled in new technologies, and demonstrated a passion for continuous learning and staying up-to-date with the latest advancements in cloud computing."
+                    ]
+                },
+                {
+                    company: "InfoCepts",
+                    title: "Senior Tech Lead/ Staff Software Engineer",
+                    location: "San Francisco, California",
+                    dates: "December 2010 – December 2019",
+                    responsibilities: [
+                        "Specialized in Java, Microservices, and big data, delivering full-stack B2B and B2C solutions to large enterprises, including complex API & data platform integrations.",
+                        "Contributed actively to excellence centers & bootcamps, enhancing overall organizational capabilities and innovation.",
+                        "Managed multi-million dollar key accounts (Fortune 500 customers) as a lead engineer over a 9-year span."
+                    ],
+                    clients: [
+                        {
+                            name: "General Electric (Client)",
+                            dates: "July 2016 – December 2019",
+                            location: "San Francisco, California",
+                            responsibilities: [
+                                "Built a modern IoT solution comprising Microservices, micro-apps, and data ingestion pipelines to consume real-time sensor data from millions of industrial appliances, generating **tens of millions of dollars in revenue**.",
+                                "Built multi-tenant Microservices to process data from backend databases over AWS and Predix cloud using Kubernetes.",
+                                "Developed robust authorization mechanisms to provide role-based access.",
+                                "Developed Spark jobs to process data from RabbitMQ over AMQP and MQTT protocols (IoT protocols).",
+                                "Led and managed a team of 4 engineers, fostering their technical and soft skill development.",
+                                "Collaborated closely with product & business teams, quality leads, and cross-functional senior managers throughout the product life cycle.",
+                                "Developed a data ingestion framework to process complex and dynamically structured CSV files and store data in NoSQL / RDBMS databases.",
+                                "Designed high-speed data simulators using Apache Spark to send data from 2500 facilities, each with 1000 sensors, publishing data to RabbitMQ.",
+                                "Built Spark-based consumers to ingest data from RabbitMQ and write to Cassandra.",
+                                "Designed and developed consumer-facing UI applications and analytical tools to provide enterprise-level insights.",
+                                "Created reusable UI and backend components.",
+                                "Defined GitHub branching strategy for the project, built internal tools, and familiar with A/B testing and statistical frameworks."
+                            ]
+                        },
+                        {
+                            name: "DuPont Pioneer (Client)",
+                            dates: "October 2015 – July 2016",
+                            location: "San Francisco, California", // Assuming same, not specified in resume
+                            responsibilities: [
+                                "Built a performant search solution to help DuPont internal users/scientists find crop data from several million records for effective crop data analysis.",
+                                "Managed high-volume textual research data in Sphinx Search, retrieved via RESTful services for consumer applications.",
+                                "Developed string tokenization utilities for automated stored procedure analysis, including complexity analysis.",
+                                "Worked closely with business teams, quality leads, and cross-functional senior managers throughout the product life cycle.",
+                                "Designed application architecture for implementing Google-like performant search using Sphinx, creating a reusable framework for all Sphinx queries.",
+                                "Designed a RESTful service framework for developing scalable code, operating across multiple databases (Teradata, Sphinx, Oracle).",
+                                "Developed Shell Scripts and set up Production, UAT, and development environments."
+                            ]
+                        },
+                        {
+                            name: "ICICI Bank (Client)",
+                            dates: "January 2015 – October 2015",
+                            location: "San Francisco, California", // Assuming same
+                            responsibilities: [
+                                "Led a data migration project from Sybase to Vertica, overseeing the migration of thousands of DB objects.",
+                                "Developed database extensions (UDX) for the Vertica database using Vertica Java UDX library.",
+                                "Designed and developed a generic framework for query execution, **cutting development costs by 30%**.",
+                                "Converted conventional Sybase IQ stored procedures to Vertica Java UDXs, creating over 1000 extensions from scratch.",
+                                "Migrated a large number of database objects from Sybase to Vertica, including 1000+ stored procedures, tables, and other DB objects.",
+                                "Worked with project managers to closely coordinate on program health, budget, and end-to-end planning.",
+                                "Developed Java utilities for automated Vertica UDX deployment.",
+                                "Designed exhaustive XML parser in Java for Informatica Power Center workflow comparison.",
+                                "Designed and developed an exhaustive query execution framework for Vertica 7.1.",
+                                "Developed Shell Scripts and set up Production, UAT, and development environments.",
+                                "Led and managed a team of 5 engineers."
+                            ]
+                        },
+                        {
+                            name: "The Nielsen Company (Client)",
+                            dates: "December 2010 – December 2014",
+                            location: "Philadelphia",
+                            responsibilities: [
+                                "Developed Nielsen's PRISM solution, an industry-leading segmentation tool, helping marketers find prospects faster & sell smarter.",
+                                "Built a self-service reports framework with dynamic drag-and-drop capabilities using Java and Ext JS, which became a top USP and led to a **significant revenue lift (> $1M)**.",
+                                "Designed and developed RESTful services to fetch report data from Oracle.",
+                                "Implemented caching in services to deliver superior user experience.",
+                                "Built APIs to dynamically provide image byte arrays to the frontend for a multi-tenant platform.",
+                                "Implemented localization and internationalization for global application usage (frontend + backend).",
+                                "Designed reusable front-end components using Adobe Flex and ActionScript, including datagrids with sort and pagination.",
+                                "Customized MicroStrategy's SDK to enhance reports, documents, and dashboards, and utilized MicroStrategy's task API for customized report execution.",
+                                "Built reusable MicroStrategy plugins by customizing the SDK.",
+                                "Developed cross-cutting interceptors for service requests.",
+                                "Designed and developed database tables, Java POJOs, and DTOs.",
+                                "Worked closely with product and business teams to collaborate on mission-critical delivery items.",
+                                "Managed nodes on WebLogic server."
+                            ]
+                        }
+                    ]
+                },
+                 {
+                    company: "Cybage",
+                    title: "Software Engineer",
+                    location: "", // Location not specified in resume for Cybage
+                    dates: "July 2010 – October 2010",
+                    responsibilities: [
+                        "Built Spring-based RESTful APIs for a large client.",
+                        "Contributed to the company's internal portal using LAMP technology stack.",
+                        "Built APIs utilizing design patterns such as Singleton and Builder.",
+                        "Gathered and analyzed requirements, translating them into technical tasks for project planning.",
+                        "Worked closely with product and business teams.",
+                        "Coded, tested, and documented projects and programs, including upgrades and deployments.",
+                        "Collaborated and consulted with peers, colleagues, and mid-level managers to resolve technical challenges and achieve goals.",
+                        "Self-learned Java and J2EE technologies."
+                    ]
+                }
+            ],
+            education: [
+                {
+                    degree: "BE in Electronics and Communication",
+                    dates: "June 2006 – May 2010 (4 years)",
+                    institution: "Nagpur University, Institute- RKNEC, India",
+                    coursework: "Relevant coursework: C, C++, Assembly language programming, Microprocessors, Digital Circuits",
+                    equivalence: "US equivalent degree: Bachelor of Science in Computer Information Systems (Based on a Credential Evaluation performed in 2016 by Parsons School of Design, NY, USA)"
+                }
+            ],
+            certifications: [
+                "Certified AI/ML Practitioner (2022)",
+                "Certified MicroStrategy Practitioner (2018)",
+                "Certified on Core Java 8 Fundamentals (2016)"
+            ],
+            trainings: [
+                { category: "AI", description: "Completed a full-time 2-month training on DS + AI fundamentals organized by Launchpad.ai. Built data-backed strategy on where Levi's must open next store based on 'point of interests' and demographics data." },
+                { category: "Microservices & Cloud", description: "Designing event-driven Microservices (2020), Confluent Kafka (2020), AWS Immersion Day (Tuning RDS Systems 2024, OpenSearch 2023, Event-driven architecture 2023), AWS fundamentals (5-day program 2019), GCP fundamentals (2022), Azure Architect fundamentals (5-day program 2019)." },
+                { category: "Big Data & Analytics", description: "Apache Spark fundamentals (2022), DataStax Spark and Cassandra (classroom training - 5-day program 2018), Certified MicroStrategy practitioner (2-month bootcamp 2018)." },
+                { category: "Project Management", description: "SAFe® trained for implementing agile practices at an enterprise scale (2020)." }
+            ],
+            hackathons: [
+                { name: "Levi's Hackathon (2022)", description: "Represented one-click checkout & estimated delivery date feature for levi.com and app." },
+                { name: "Walmart Bake-off (2019)", description: "Built IoT solution to process high-volume sensor data from thousands of facilities and present data (including anomalies) through meaningful visualizations." }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate Header Name
+            document.getElementById('headerName').textContent = resumeData.name;
+
+            // Populate Contact Info
+            const contactEmailEl = document.getElementById('contactEmail');
+            contactEmailEl.href = `mailto:${resumeData.contact.email}`;
+            contactEmailEl.querySelector('span').textContent = resumeData.contact.email;
+            
+            document.getElementById('contactPhone').querySelector('span').textContent = resumeData.contact.phone;
+            
+            const contactLinkedinEl = document.getElementById('contactLinkedin');
+            contactLinkedinEl.href = resumeData.contact.linkedin.startsWith('http') ? resumeData.contact.linkedin : `https://${resumeData.contact.linkedin}`;
+            contactLinkedinEl.querySelector('span').textContent = resumeData.contact.linkedin.replace(/^https?:\/\//, '');
+
+
+            document.getElementById('contactLocation').querySelector('span').textContent = resumeData.contact.location;
+
+            // Populate Summary
+            document.getElementById('summaryContent').innerHTML = parseAchievements(resumeData.summary);
+
+            // Populate Skills
+            const skillsContent = document.getElementById('skillsContent');
+            resumeData.skills.forEach(skillCategory => {
+                const categoryDiv = document.createElement('div');
+                const categoryTitle = document.createElement('h3');
+                categoryTitle.className = 'text-lg font-semibold text-slate-700 mb-2';
+                categoryTitle.textContent = skillCategory.category;
+                categoryDiv.appendChild(categoryTitle);
+
+                const itemsDiv = document.createElement('div');
+                itemsDiv.className = 'flex flex-wrap gap-2';
+                skillCategory.items.forEach(item => {
+                    const skillBadge = document.createElement('span');
+                    skillBadge.className = 'bg-sky-100 text-sky-700 px-3 py-1 rounded-full text-sm font-medium shadow-sm hover:bg-sky-200 transition-colors';
+                    skillBadge.textContent = item;
+                    itemsDiv.appendChild(skillBadge);
+                });
+                categoryDiv.appendChild(itemsDiv);
+                skillsContent.appendChild(categoryDiv);
+            });
+
+            // Populate Experience
+            const experienceContent = document.getElementById('experienceContent');
+            resumeData.experience.forEach((job, index) => {
+                const jobDiv = document.createElement('div');
+                jobDiv.className = 'bg-slate-50 p-6 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-xl';
+
+                const header = document.createElement('div');
+                header.className = 'flex justify-between items-center cursor-pointer accordion-toggle';
+                header.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-semibold text-sky-700">${job.title}</h3>
+                        <p class="text-md font-medium text-slate-600">${job.company} | ${job.location}</p>
+                        <p class="text-sm text-slate-500">${job.dates}</p>
+                    </div>
+                    <svg class="w-6 h-6 text-sky-600 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                `;
+                
+                const responsibilitiesDiv = document.createElement('div');
+                responsibilitiesDiv.className = 'mt-4 accordion-content'; // Initially hidden
+                
+                const ul = document.createElement('ul');
+                ul.className = 'list-disc list-inside space-y-2 text-slate-700 leading-relaxed';
+                job.responsibilities.forEach(resp => {
+                    const li = document.createElement('li');
+                    li.innerHTML = parseAchievements(resp);
+                    ul.appendChild(li);
+                });
+                responsibilitiesDiv.appendChild(ul);
+
+                if (job.clients) {
+                    const clientsTitle = document.createElement('h4');
+                    clientsTitle.className = 'text-md font-semibold text-slate-600 mt-4 mb-2';
+                    clientsTitle.textContent = 'Key Client Projects:';
+                    responsibilitiesDiv.appendChild(clientsTitle);
+
+                    job.clients.forEach(client => {
+                        const clientDiv = document.createElement('div');
+                        clientDiv.className = 'ml-4 mt-2 mb-4 p-3 bg-white rounded shadow';
+                        clientDiv.innerHTML = `<p class="font-semibold text-slate-700">${client.name} (${client.dates})</p>`;
+                        const clientUl = document.createElement('ul');
+                        clientUl.className = 'list-disc list-inside space-y-1 text-sm text-slate-600 pl-4';
+                        client.responsibilities.forEach(resp => {
+                            const li = document.createElement('li');
+                            li.innerHTML = parseAchievements(resp);
+                            clientUl.appendChild(li);
+                        });
+                        clientDiv.appendChild(clientUl);
+                        responsibilitiesDiv.appendChild(clientDiv);
+                    });
+                }
+                
+                jobDiv.appendChild(header);
+                jobDiv.appendChild(responsibilitiesDiv);
+                experienceContent.appendChild(jobDiv);
+            });
+            
+            // Accordion functionality
+            document.querySelectorAll('.accordion-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('svg');
+                    content.classList.toggle('open');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+
+
+            // Populate Education
+            const educationContent = document.getElementById('educationContent');
+            resumeData.education.forEach(edu => {
+                const eduDiv = document.createElement('div');
+                eduDiv.className = 'p-4 bg-slate-50 rounded-lg shadow-sm';
+                eduDiv.innerHTML = `
+                    <h3 class="text-lg font-semibold text-sky-700">${edu.degree}</h3>
+                    <p class="text-md text-slate-600">${edu.institution}</p>
+                    <p class="text-sm text-slate-500">${edu.dates}</p>
+                    ${edu.coursework ? `<p class="text-sm text-slate-500 mt-1"><em>${edu.coursework}</em></p>` : ''}
+                    ${edu.equivalence ? `<p class="text-xs text-slate-400 mt-1">${edu.equivalence}</p>` : ''}
+                `;
+                educationContent.appendChild(eduDiv);
+            });
+
+            // Populate Certifications
+            const certificationsContent = document.getElementById('certificationsContent');
+            if (resumeData.certifications.length > 0) {
+                const certsTitle = document.createElement('h3');
+                certsTitle.className = 'text-lg font-semibold text-slate-700 mb-2';
+                certsTitle.textContent = 'Certifications';
+                certificationsContent.appendChild(certsTitle);
+                const certsUl = document.createElement('ul');
+                certsUl.className = 'list-disc list-inside space-y-1 text-slate-700';
+                resumeData.certifications.forEach(cert => {
+                    const li = document.createElement('li');
+                    li.textContent = cert;
+                    certsUl.appendChild(li);
+                });
+                certificationsContent.appendChild(certsUl);
+            }
+
+
+            // Populate Trainings
+            const trainingsContent = document.getElementById('trainingsContent');
+             if (resumeData.trainings.length > 0) {
+                const trainingsTitle = document.createElement('h3');
+                trainingsTitle.className = 'text-lg font-semibold text-slate-700 mb-2 mt-4';
+                trainingsTitle.textContent = 'Professional Trainings';
+                trainingsContent.appendChild(trainingsTitle);
+                resumeData.trainings.forEach(training => {
+                    const trainingDiv = document.createElement('div');
+                    trainingDiv.className = 'p-3 bg-slate-50 rounded-lg shadow-sm';
+                    trainingDiv.innerHTML = `
+                        <p class="font-semibold text-sky-700">${training.category}</p>
+                        <p class="text-sm text-slate-600">${training.description}</p>
+                    `;
+                    trainingsContent.appendChild(trainingDiv);
+                });
+            }
+
+
+            // Populate Hackathons
+            const hackathonsContent = document.getElementById('hackathonsContent');
+            resumeData.hackathons.forEach(hackathon => {
+                const hackathonDiv = document.createElement('div');
+                hackathonDiv.className = 'p-4 bg-slate-50 rounded-lg shadow-sm';
+                hackathonDiv.innerHTML = `
+                    <h3 class="text-lg font-semibold text-sky-700">${hackathon.name}</h3>
+                    <p class="text-sm text-slate-600">${hackathon.description}</p>
+                `;
+                hackathonsContent.appendChild(hackathonDiv);
+            });
+
+            // Footer Year
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobileMenu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+            
+            // Active Nav Link Styling
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('header nav a, #mobileMenu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) { // 80 for header height + buffer
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active', 'text-sky-600', 'border-sky-600');
+                    link.classList.add('text-slate-600', 'border-transparent');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active', 'text-sky-600', 'border-sky-600');
+                        link.classList.remove('text-slate-600', 'border-transparent');
+                    }
+                });
+            });
+            
+            // Experience Timeline Chart
+            renderExperienceTimeline();
+
+        });
+        
+        function parseAchievements(text) {
+            // Bolds text between **asterisks** and applies achievement class
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong class="achievement">$1</strong>');
+        }
+
+        function renderExperienceTimeline() {
+            const ctx = document.getElementById('experienceTimelineChart').getContext('2d');
+            const experienceForChart = [...resumeData.experience].reverse(); // Reverse for chronological display in chart
+
+            const labels = experienceForChart.map(job => `${job.company} (${job.title.substring(0,30)}...)`);
+            const data = experienceForChart.map(job => {
+                const [start, endText] = job.dates.split('–').map(s => s.trim());
+                const startDate = parseDate(start);
+                const endDate = endText.toLowerCase() === 'current' ? new Date() : parseDate(endText);
+                
+                if (!startDate || !endDate) return 0; // Should not happen with valid data
+                // Calculate duration in years for the chart (approximate)
+                return (endDate.getFullYear() - startDate.getFullYear()) + (endDate.getMonth() - startDate.getMonth()) / 12;
+            });
+            
+            // Create a "start offset" for each job relative to the earliest job start date
+            const earliestStartDate = experienceForChart.reduce((earliest, job) => {
+                const currentStartDate = parseDate(job.dates.split('–')[0].trim());
+                return currentStartDate < earliest ? currentStartDate : earliest;
+            }, new Date());
+
+            const chartData = experienceForChart.map(job => {
+                const [start, endText] = job.dates.split('–').map(s => s.trim());
+                const startDate = parseDate(start);
+                const endDate = endText.toLowerCase() === 'current' ? new Date() : parseDate(endText);
+
+                if (!startDate || !endDate) return [0,0];
+                
+                const startOffset = (startDate.getFullYear() - earliestStartDate.getFullYear()) + (startDate.getMonth() - earliestStartDate.getMonth())/12;
+                const duration = (endDate.getFullYear() - startDate.getFullYear()) + (endDate.getMonth() - startDate.getMonth()) / 12;
+                return [startOffset, startOffset + duration];
+            });
+
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Experience Duration (Years from earliest start)',
+                        data: chartData,
+                        backgroundColor: 'rgba(56, 189, 248, 0.6)', // sky-500 with opacity
+                        borderColor: 'rgba(14, 165, 233, 1)', // sky-600
+                        borderWidth: 1,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.7,
+                        borderSkipped: false, // To make it look like a timeline bar
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Years (Relative to Earliest Start Date in Resume)'
+                            },
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(203, 213, 225, 0.3)' // slate-300 with opacity
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                autoSkip: false,
+                                callback: function(value, index, values) {
+                                    const label = this.getLabelForValue(value);
+                                    return label.length > 35 ? label.substring(0, 32) + '...' : label;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const jobIndex = context.dataIndex;
+                                    const job = experienceForChart[jobIndex];
+                                    const duration = context.dataset.data[jobIndex][1] - context.dataset.data[jobIndex][0];
+                                    return `${job.company}: ${job.dates} (Approx. ${duration.toFixed(1)} years)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function parseDate(dateString) {
+            if (!dateString) return null;
+            // Simple parser for "Month Year" format, e.g., "June 2024" or "Dec 2019"
+            const parts = dateString.split(' ');
+            if (parts.length !== 2) return null; // Invalid format
+            
+            const monthNames = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+            const month = monthNames.indexOf(parts[0].toLowerCase().substring(0,3));
+            const year = parseInt(parts[1]);
+
+            if (month === -1 || isNaN(year)) return null;
+            return new Date(year, month, 1); // Day is set to 1 for consistency
+        }
+
+    </script>
+</body>
+</html>
