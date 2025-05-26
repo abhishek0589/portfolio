@@ -6,90 +6,138 @@
     <title>Abhishek Chaudhary - Software Engineering Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Visualization & Content Choices:
-        - Summary: Text block. Goal: Quick overview. Interaction: None. Justification: Standard resume practice.
-        - Skills: Categorized lists with Tailwind badges. Goal: Showcase technical breadth. Interaction: Hover effects. Justification: Visually appealing and organized.
-        - Experience: Chronological list with accordion-style expandable details for each role. Goal: Detail career progression and achievements. Interaction: Click to expand/collapse. Quantifiable achievements emphasized. Justification: Allows for detailed information without overwhelming the initial view.
-        - Experience Timeline (Chart.js): Horizontal bar chart. Goal: Visual overview of career timeline. Interaction: None for this version, purely visual. Justification: Enhances visual appeal. Library: Chart.js (Canvas).
-        - Education/Certs/Trainings/Hackathons: Structured lists. Goal: Provide supporting credentials. Interaction: None. Justification: Clear and concise presentation.
-        - All textual content directly from the resume. No SVG/Mermaid used. All charts via Chart.js on Canvas. -->
     <style>
         body {
-            font-family: 'Inter', sans-serif; /* Tailwind's default sans-serif stack often includes Inter */
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f1f5f9, #e2e8f0); /* Gradient background */
         }
-        /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
         }
-        /* Custom scrollbar for a cleaner look (optional) */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f5f9; /* slate-100 */
+            background: #e2e8f0; /* slate-200 */
         }
         ::-webkit-scrollbar-thumb {
-            background: #38bdf8; /* sky-500 */
-            border-radius: 4px;
+            background: #0ea5e9; /* sky-600 */
+            border-radius: 5px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #0ea5e9; /* sky-600 */
+            background: #0284c7; /* sky-700 */
         }
         .timeline-chart-container {
             position: relative;
             width: 100%;
-            max-width: 800px; /* max-w-4xl */
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px; /* h-72 */
-            max-height: 350px; /* Consistent with prompt example */
+            max-width: 900px;
+            margin: 0 auto;
+            height: 400px; /* Increased for better visibility */
         }
-        @media (min-width: 768px) { /* md breakpoint */
+        @media (min-width: 768px) {
             .timeline-chart-container {
-                height: 350px; /* h-80 from prompt example */
+                height: 450px;
             }
         }
         .achievement {
-            font-weight: 600;
-            color: #b45309; /* amber-700, slightly darker than planned for better contrast */
+            font-weight: 700;
+            color: #b91c1c; /* red-700 for emphasis */
+            background: linear-gradient(90deg, #b91c1c, #dc2626); /* Gradient text */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .section-title {
-            border-bottom: 2px solid #0ea5e9; /* sky-600 */
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #0ea5e9;
+            padding-bottom: 0.75rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #0ea5e9, #38bdf8);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        .section-title:hover::after {
+            transform: translateX(0);
         }
         .nav-link {
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
         .nav-link.active, .nav-link:hover {
-            color: #0ea5e9; /* sky-600 */
-            border-bottom-color: #0ea5e9; /* sky-600 */
+            color: #0ea5e9;
+            border-bottom-color: #0ea5e9;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: #0ea5e9;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
         }
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease;
+            opacity: 0;
         }
         .accordion-content.open {
-            max-height: 2000px; /* Adjust as needed, should be larger than any possible content */
+            max-height: 3000px;
+            opacity: 1;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .job-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .skill-badge {
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .skill-badge:hover {
+            transform: scale(1.05);
+            background-color: #0ea5e9;
+            color: #ffffff;
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased">
-
-    <header class="bg-white shadow-md sticky top-0 z-50">
+<body class="bg-gradient-to-b from-slate-100 to-slate-200 text-slate-800 antialiased">
+    <header class="bg-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 id="headerName" class="text-2xl font-bold text-sky-600">Abhishek Chaudhary</h1>
+                    <h1 id="headerName" class="text-3xl font-bold text-sky-600 bg-gradient-to-r from-sky-600 to-sky-400 bg-clip-text text-transparent">Abhishek Chaudhary</h1>
                 </div>
                 <nav class="hidden md:flex space-x-8">
-                    <a href="#summary" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Summary</a>
-                    <a href="#skills" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Skills</a>
-                    <a href="#experience" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Experience</a>
-                    <a href="#education" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Education</a>
-                    <a href="#certifications" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Certs & Training</a>
-                    <a href="#hackathons" class="nav-link text-slate-600 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Hackathons</a>
+                    <a href="#summary" class="nav-link text-slate-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Summary</a>
+                    <a href="#skills" class="nav-link text-slate-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Skills</a>
+                    <a href="#experience" class="nav-link text-slate-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Experience</a>
+                    <a href="#education" class="nav-link text-slate-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Education</a>
+                    <a href="#certifications" class="nav-link text-slate-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Certs & Training</a>
+                    <a href="#hackathons" class="nav-link text-slate-600 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Hackathons</a>
                 </nav>
                 <div class="md:hidden">
                     <button id="mobileMenuButton" class="text-slate-600 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500">
@@ -100,7 +148,7 @@
                 </div>
             </div>
         </div>
-        <div id="mobileMenu" class="md:hidden hidden">
+        <div id="mobileMenu" class="md:hidden hidden bg-white shadow-md">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#summary" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Summary</a>
                 <a href="#skills" class="nav-link text-slate-600 hover:bg-sky-50 hover:text-sky-600 block px-3 py-2 rounded-md text-base font-medium">Skills</a>
@@ -112,64 +160,62 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <section id="contact" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-             <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-sm text-slate-700">
-                <a id="contactEmail" href="#" class="hover:text-sky-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" /><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg><span></span></a>
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <section id="contact" class="mb-12 p-6 bg-white rounded-xl shadow-lg fade-in-section">
+            <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-sm text-slate-700">
+                <a id="contactEmail" href="#" class="hover:text-sky-600 flex items-center transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" /><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg><span></span></a>
                 <span id="contactPhone" class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5h-1.528a13.501 13.501 0 01-11.41-11.41A1.5 1.5 0 013.5 2H5a1.5 1.5 0 011.5 1.5v.049c0 .331-.079.658-.228.944l-.359.687a.75.75 0 00.08.882A10.042 10.042 0 008.882 10.92a.75.75 0 00.882.08l.687-.359A1.492 1.492 0 0111.951 11H12A1.5 1.5 0 0113.5 12.5v1.5A1.5 1.5 0 0112 15.5h-.049c-.331 0-.658.079-.944.228l-.687.359a.75.75 0 00-.08.882 10.042 10.042 0 004.081 4.081.75.75 0 00.882-.08l.359-.687A1.492 1.492 0 0115.5 20h.049A1.5 1.5 0 0117 18.5v-1.5a1.5 1.5 0 01-1.5-1.5h-1.528a13.501 13.501 0 01-11.41-11.41A1.5 1.5 0 013.5 2H5a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5h-1.528a13.501 13.501 0 01-11.41-11.41A1.5 1.5 0 013.5 2H5a1.5 1.5 0 011.5 1.5V3.5z" clip-rule="evenodd" /></svg><span></span></span>
-                <a id="contactLinkedin" href="#" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.206v4.249H8.014V8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 7.435a1.426 1.426 0 100-2.852 1.426 1.426 0 000 2.852zm1.282 8.903H3.723V8.59h2.564v7.748zM17.638 2H2.363A1.362 1.362 0 001 3.362v13.276A1.362 1.362 0 002.363 18h15.275A1.362 1.362 0 0019 16.638V3.362A1.362 1.362 0 0017.638 2z" clip-rule="evenodd" /></svg><span></span></a>
+                <a id="contactLinkedin" href="#" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600 flex items-center transition-colors"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.206v4.249H8.014V8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 7.435a1.426 1.426 0 100-2.852 1.426 1.426 0 000 2.852zm1.282 8.903H3.723V8.59h2.564v7.748zM17.638 2H2.363A1.362 1.362 0 001 3.362v13.276A1.362 1.362 0 002.363 18h15.275A1.362 1.362 0 0019 16.638V3.362A1.362 1.362 0 0017.638 2z" clip-rule="evenodd" /></svg><span></span></a>
                 <span id="contactLocation" class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-1 text-sky-500"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.145l.005-.002.007-.004.012-.007a7.032 7.032 0 00.22-.165l.003-.002.003-.002.002-.001a5.016 5.016 0 00.97-.834l.008-.007c.15-.148.291-.302.418-.462l.012-.016.007-.008.004-.005.002-.002a3.496 3.496 0 00.488-.694l.002-.003.001-.002A2.25 2.25 0 0015 13.25V8.5a5 5 0 00-10 0v4.75c0 .623.213 1.2.586 1.69l.001.002.002.003c.164.247.353.465.558.655l.003.003.002.002.001.001a5.016 5.016 0 00.97.834l.008-.007a13.39 13.39 0 00.418.462l.012.016.007.008.004.005.002.002c.158.19.326.37.508.533l.002.002a5.741 5.741 0 00.28.145l.005.002.007.004.012.007a7.032 7.032 0 00.221.165l.003.002.003.002.002.001c.004.002.009.003.013.005h.001zM10 11.25a2.75 2.75 0 100-5.5 2.75 2.75 0 000 5.5z" clip-rule="evenodd" /></svg><span></span></span>
             </div>
         </section>
 
-        <section id="summary" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold text-sky-600 section-title">Summary</h2>
-            <p class="text-slate-700 leading-relaxed">A brief overview of my professional background and key strengths.</p>
-            <p id="summaryContent" class="mt-4 text-slate-700 leading-relaxed"></p>
+        <section id="summary" class="mb-12 p-8 bg-white rounded-xl shadow-lg fade-in-section">
+            <h2 class="text-3xl font-bold text-sky-600 section-title">Summary</h2>
+            <p class="text-slate-700 leading-relaxed text-lg">A brief overview of my professional background and key strengths.</p>
+            <p id="summaryContent" class="mt-4 text-slate-700 leading-relaxed text-base"></p>
         </section>
 
-        <section id="skills" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold text-sky-600 section-title">Skills</h2>
-            <p class="text-slate-700 leading-relaxed mb-6">A categorized list of my technical and leadership competencies.</p>
+        <section id="skills" class="mb-12 p-8 bg-white rounded-xl shadow-lg fade-in-section">
+            <h2 class="text-3xl font-bold text-sky-600 section-title">Skills</h2>
+            <p class="text-slate-700 leading-relaxed mb-6 text-lg">A categorized list of my technical and leadership competencies.</p>
             <div id="skillsContent" class="space-y-6"></div>
         </section>
 
-        <section id="experience" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold text-sky-600 section-title">Professional Experience</h2>
-            <p class="text-slate-700 leading-relaxed mb-6">A detailed account of my professional journey, highlighting key responsibilities and achievements in each role.</p>
-            
+        <section id="experience" class="mb-12 p-8 bg-white rounded-xl shadow-lg fade-in-section">
+            <h2 class="text-3xl font-bold text-sky-600 section-title">Professional Experience</h2>
+            <p class="text-slate-700 leading-relaxed mb-6 text-lg">A detailed account of my professional journey, highlighting key responsibilities and achievements in each role.</p>
             <div class="mb-8">
                 <h3 class="text-xl font-semibold text-slate-700 mb-4 text-center">Career Timeline</h3>
-                <div class="timeline-chart-container bg-slate-50 p-4 rounded-lg shadow-inner">
+                <div class="timeline-chart-container bg-slate-50 p-6 rounded-xl shadow-inner">
                     <canvas id="experienceTimelineChart"></canvas>
                 </div>
             </div>
-            
             <div id="experienceContent" class="space-y-8"></div>
         </section>
 
-        <section id="education" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold text-sky-600 section-title">Education</h2>
-            <p class="text-slate-700 leading-relaxed mb-6">My academic background and professional certifications.</p>
+        <section id="education" class="mb-12 p-8 bg-white rounded-xl shadow-lg fade-in-section">
+            <h2 class="text-3xl font-bold text-sky-600 section-title">Education</h2>
+            <p class="text-slate-700 leading-relaxed mb-6 text-lg">My academic background and professional certifications.</p>
             <div id="educationContent" class="space-y-4"></div>
         </section>
 
-        <section id="certifications" class="mb-12 p-6 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold text-sky-600 section-title">Certifications & Trainings</h2>
-             <p class="text-slate-700 leading-relaxed mb-6">Key certifications and professional development programs completed.</p>
+        <section id="certifications" class="mb-12 p-8 bg-white rounded-xl shadow-lg fade-in-section">
+            <h2 class="text-3xl font-bold text-sky-600 section-title">Certifications & Trainings</h2>
+            <p class="text-slate-700 leading-relaxed mb-6 text-lg">Key certifications and professional development programs completed.</p>
             <div id="certificationsContent" class="mb-6 space-y-2"></div>
             <div id="trainingsContent" class="space-y-4"></div>
         </section>
 
-        <section id="hackathons" class="p-6 bg-white rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold text-sky-600 section-title">Hackathons</h2>
-            <p class="text-slate-700 leading-relaxed mb-6">Further learning initiatives and practical application of skills in competitive environments.</p>
+        <section id="hackathons" class="p-8 bg-white rounded-xl shadow-lg fade-in-section">
+            <h2 class="text-3xl font-bold text-sky-600 section-title">Hackathons</h2>
+            <p class="text-slate-700 leading-relaxed mb-6 text-lg">Further learning initiatives and practical application of skills in competitive environments.</p>
             <div id="hackathonsContent" class="space-y-4"></div>
         </section>
     </main>
 
-    <footer class="text-center py-8 text-slate-500 text-sm">
-        <p>&copy; <span id="currentYear"></span> Abhishek Chaudhary. Interactive Resume.</p>
+    <footer class="text-center py-8 text-slate-500 text-sm bg-slate-800 text-white">
+        <p>© <span id="currentYear"></span> Abhishek Chaudhary. Interactive Resume.</p>
     </footer>
 
     <script>
@@ -274,7 +320,7 @@
                         {
                             name: "DuPont Pioneer (Client)",
                             dates: "October 2015 – July 2016",
-                            location: "San Francisco, California", // Assuming same, not specified in resume
+                            location: "San Francisco, California",
                             responsibilities: [
                                 "Built a performant search solution to help DuPont internal users/scientists find crop data from several million records for effective crop data analysis.",
                                 "Managed high-volume textual research data in Sphinx Search, retrieved via RESTful services for consumer applications.",
@@ -288,7 +334,7 @@
                         {
                             name: "ICICI Bank (Client)",
                             dates: "January 2015 – October 2015",
-                            location: "San Francisco, California", // Assuming same
+                            location: "San Francisco, California",
                             responsibilities: [
                                 "Led a data migration project from Sybase to Vertica, overseeing the migration of thousands of DB objects.",
                                 "Developed database extensions (UDX) for the Vertica database using Vertica Java UDX library.",
@@ -325,10 +371,10 @@
                         }
                     ]
                 },
-                 {
+                {
                     company: "Cybage",
                     title: "Software Engineer",
-                    location: "", // Location not specified in resume for Cybage
+                    location: "",
                     dates: "July 2010 – October 2010",
                     responsibilities: [
                         "Built Spring-based RESTful APIs for a large client.",
@@ -376,14 +422,10 @@
             const contactEmailEl = document.getElementById('contactEmail');
             contactEmailEl.href = `mailto:${resumeData.contact.email}`;
             contactEmailEl.querySelector('span').textContent = resumeData.contact.email;
-            
             document.getElementById('contactPhone').querySelector('span').textContent = resumeData.contact.phone;
-            
             const contactLinkedinEl = document.getElementById('contactLinkedin');
             contactLinkedinEl.href = resumeData.contact.linkedin.startsWith('http') ? resumeData.contact.linkedin : `https://${resumeData.contact.linkedin}`;
             contactLinkedinEl.querySelector('span').textContent = resumeData.contact.linkedin.replace(/^https?:\/\//, '');
-
-
             document.getElementById('contactLocation').querySelector('span').textContent = resumeData.contact.location;
 
             // Populate Summary
@@ -394,15 +436,14 @@
             resumeData.skills.forEach(skillCategory => {
                 const categoryDiv = document.createElement('div');
                 const categoryTitle = document.createElement('h3');
-                categoryTitle.className = 'text-lg font-semibold text-slate-700 mb-2';
+                categoryTitle.className = 'text-xl font-semibold text-slate-700 mb-3';
                 categoryTitle.textContent = skillCategory.category;
                 categoryDiv.appendChild(categoryTitle);
-
                 const itemsDiv = document.createElement('div');
-                itemsDiv.className = 'flex flex-wrap gap-2';
+                itemsDiv.className = 'flex flex-wrap gap-3';
                 skillCategory.items.forEach(item => {
                     const skillBadge = document.createElement('span');
-                    skillBadge.className = 'bg-sky-100 text-sky-700 px-3 py-1 rounded-full text-sm font-medium shadow-sm hover:bg-sky-200 transition-colors';
+                    skillBadge.className = 'skill-badge bg-sky-100 text-sky-700 px-4 py-2 rounded-full text-sm font-medium shadow-sm';
                     skillBadge.textContent = item;
                     itemsDiv.appendChild(skillBadge);
                 });
@@ -414,8 +455,7 @@
             const experienceContent = document.getElementById('experienceContent');
             resumeData.experience.forEach((job, index) => {
                 const jobDiv = document.createElement('div');
-                jobDiv.className = 'bg-slate-50 p-6 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-xl';
-
+                jobDiv.className = 'job-card bg-slate-50 p-6 rounded-xl shadow-md';
                 const header = document.createElement('div');
                 header.className = 'flex justify-between items-center cursor-pointer accordion-toggle';
                 header.innerHTML = `
@@ -426,31 +466,27 @@
                     </div>
                     <svg class="w-6 h-6 text-sky-600 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 `;
-                
                 const responsibilitiesDiv = document.createElement('div');
-                responsibilitiesDiv.className = 'mt-4 accordion-content'; // Initially hidden
-                
+                responsibilitiesDiv.className = 'mt-4 accordion-content';
                 const ul = document.createElement('ul');
-                ul.className = 'list-disc list-inside space-y-2 text-slate-700 leading-relaxed';
+                ul.className = 'list-disc list-inside space-y-3 text-slate-700 leading-relaxed text-base';
                 job.responsibilities.forEach(resp => {
                     const li = document.createElement('li');
                     li.innerHTML = parseAchievements(resp);
                     ul.appendChild(li);
                 });
                 responsibilitiesDiv.appendChild(ul);
-
                 if (job.clients) {
                     const clientsTitle = document.createElement('h4');
-                    clientsTitle.className = 'text-md font-semibold text-slate-600 mt-4 mb-2';
+                    clientsTitle.className = 'text-lg font-semibold text-slate-600 mt-6 mb-3';
                     clientsTitle.textContent = 'Key Client Projects:';
                     responsibilitiesDiv.appendChild(clientsTitle);
-
                     job.clients.forEach(client => {
                         const clientDiv = document.createElement('div');
-                        clientDiv.className = 'ml-4 mt-2 mb-4 p-3 bg-white rounded shadow';
-                        clientDiv.innerHTML = `<p class="font-semibold text-slate-700">${client.name} (${client.dates})</p>`;
+                        clientDiv.className = 'ml-4 mt-3 mb-4 p-4 bg-white rounded-xl shadow-sm';
+                        clientDiv.innerHTML = `<p class="font-semibold text-sky-700">${client.name} (${client.dates})</p>`;
                         const clientUl = document.createElement('ul');
-                        clientUl.className = 'list-disc list-inside space-y-1 text-sm text-slate-600 pl-4';
+                        clientUl.className = 'list-disc list-inside space-y-2 text-sm text-slate-600 pl-4';
                         client.responsibilities.forEach(resp => {
                             const li = document.createElement('li');
                             li.innerHTML = parseAchievements(resp);
@@ -460,12 +496,11 @@
                         responsibilitiesDiv.appendChild(clientDiv);
                     });
                 }
-                
                 jobDiv.appendChild(header);
                 jobDiv.appendChild(responsibilitiesDiv);
                 experienceContent.appendChild(jobDiv);
             });
-            
+
             // Accordion functionality
             document.querySelectorAll('.accordion-toggle').forEach(button => {
                 button.addEventListener('click', () => {
@@ -475,7 +510,6 @@
                     icon.classList.toggle('rotate-180');
                 });
             });
-
 
             // Populate Education
             const educationContent = document.getElementById('educationContent');
@@ -496,11 +530,11 @@
             const certificationsContent = document.getElementById('certificationsContent');
             if (resumeData.certifications.length > 0) {
                 const certsTitle = document.createElement('h3');
-                certsTitle.className = 'text-lg font-semibold text-slate-700 mb-2';
+                certsTitle.className = 'text-lg font-semibold text-slate-700 mb-3';
                 certsTitle.textContent = 'Certifications';
                 certificationsContent.appendChild(certsTitle);
                 const certsUl = document.createElement('ul');
-                certsUl.className = 'list-disc list-inside space-y-1 text-slate-700';
+                certsUl.className = 'list-disc list-inside space-y-2 text-slate-700';
                 resumeData.certifications.forEach(cert => {
                     const li = document.createElement('li');
                     li.textContent = cert;
@@ -509,17 +543,16 @@
                 certificationsContent.appendChild(certsUl);
             }
 
-
             // Populate Trainings
             const trainingsContent = document.getElementById('trainingsContent');
-             if (resumeData.trainings.length > 0) {
+            if (resumeData.trainings.length > 0) {
                 const trainingsTitle = document.createElement('h3');
-                trainingsTitle.className = 'text-lg font-semibold text-slate-700 mb-2 mt-4';
+                trainingsTitle.className = 'text-lg font-semibold text-slate-700 mb-3 mt-6';
                 trainingsTitle.textContent = 'Professional Trainings';
                 trainingsContent.appendChild(trainingsTitle);
                 resumeData.trainings.forEach(training => {
                     const trainingDiv = document.createElement('div');
-                    trainingDiv.className = 'p-3 bg-slate-50 rounded-lg shadow-sm';
+                    trainingDiv.className = 'p-4 bg-slate-50 rounded-lg shadow-sm';
                     trainingDiv.innerHTML = `
                         <p class="font-semibold text-sky-700">${training.category}</p>
                         <p class="text-sm text-slate-600">${training.description}</p>
@@ -527,7 +560,6 @@
                     trainingsContent.appendChild(trainingDiv);
                 });
             }
-
 
             // Populate Hackathons
             const hackathonsContent = document.getElementById('hackathonsContent');
@@ -550,27 +582,23 @@
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
-            
-            // Close mobile menu when a link is clicked
             document.querySelectorAll('#mobileMenu a').forEach(link => {
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
                 });
             });
-            
+
             // Active Nav Link Styling
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('header nav a, #mobileMenu a');
-
             window.addEventListener('scroll', () => {
                 let current = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 80) { // 80 for header height + buffer
+                    if (pageYOffset >= sectionTop - 80) {
                         current = section.getAttribute('id');
                     }
                 });
-
                 navLinks.forEach(link => {
                     link.classList.remove('active', 'text-sky-600', 'border-sky-600');
                     link.classList.add('text-slate-600', 'border-transparent');
@@ -580,64 +608,72 @@
                     }
                 });
             });
-            
+
+            // Fade-in Animation on Scroll
+            const fadeInSections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            fadeInSections.forEach(section => observer.observe(section));
+
             // Experience Timeline Chart
             renderExperienceTimeline();
-
         });
-        
+
         function parseAchievements(text) {
-            // Bolds text between **asterisks** and applies achievement class
             return text.replace(/\*\*(.*?)\*\*/g, '<strong class="achievement">$1</strong>');
         }
 
         function renderExperienceTimeline() {
             const ctx = document.getElementById('experienceTimelineChart').getContext('2d');
-            const experienceForChart = [...resumeData.experience].reverse(); // Reverse for chronological display in chart
-
-            const labels = experienceForChart.map(job => `${job.company} (${job.title.substring(0,30)}...)`);
-            const data = experienceForChart.map(job => {
-                const [start, endText] = job.dates.split('–').map(s => s.trim());
-                const startDate = parseDate(start);
-                const endDate = endText.toLowerCase() === 'current' ? new Date() : parseDate(endText);
-                
-                if (!startDate || !endDate) return 0; // Should not happen with valid data
-                // Calculate duration in years for the chart (approximate)
-                return (endDate.getFullYear() - startDate.getFullYear()) + (endDate.getMonth() - startDate.getMonth()) / 12;
-            });
-            
-            // Create a "start offset" for each job relative to the earliest job start date
+            const experienceForChart = [...resumeData.experience].reverse();
+            const labels = experienceForChart.map(job => `${job.company} (${job.title.substring(0, 30)}...)`);
             const earliestStartDate = experienceForChart.reduce((earliest, job) => {
                 const currentStartDate = parseDate(job.dates.split('–')[0].trim());
                 return currentStartDate < earliest ? currentStartDate : earliest;
             }, new Date());
-
             const chartData = experienceForChart.map(job => {
                 const [start, endText] = job.dates.split('–').map(s => s.trim());
                 const startDate = parseDate(start);
                 const endDate = endText.toLowerCase() === 'current' ? new Date() : parseDate(endText);
-
-                if (!startDate || !endDate) return [0,0];
-                
-                const startOffset = (startDate.getFullYear() - earliestStartDate.getFullYear()) + (startDate.getMonth() - earliestStartDate.getMonth())/12;
+                if (!startDate || !endDate) return [0, 0];
+                const startOffset = (startDate.getFullYear() - earliestStartDate.getFullYear()) + (startDate.getMonth() - earliestStartDate.getMonth()) / 12;
                 const duration = (endDate.getFullYear() - startDate.getFullYear()) + (endDate.getMonth() - startDate.getMonth()) / 12;
                 return [startOffset, startOffset + duration];
             });
 
+            // Color palette for different companies
+            const colors = [
+                'rgba(56, 189, 248, 0.6)', // sky-500
+                'rgba(236, 72, 153, 0.6)', // pink-500
+                'rgba(16, 185, 129, 0.6)', // emerald-500
+                'rgba(245, 158, 11, 0.6)', // amber-500
+                'rgba(139, 92, 246, 0.6)'  // violet-500
+            ];
+            const borderColors = [
+                'rgba(14, 165, 233, 1)', // sky-600
+                'rgba(219, 39, 119, 1)', // pink-600
+                'rgba(5, 150, 105, 1)', // emerald-600
+                'rgba(217, 119, 6, 1)', // amber-600
+                'rgba(124, 58, 237, 1)'  // violet-600
+            ];
 
             new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Experience Duration (Years from earliest start)',
+                        label: 'Experience Duration',
                         data: chartData,
-                        backgroundColor: 'rgba(56, 189, 248, 0.6)', // sky-500 with opacity
-                        borderColor: 'rgba(14, 165, 233, 1)', // sky-600
-                        borderWidth: 1,
-                        barPercentage: 0.6,
-                        categoryPercentage: 0.7,
-                        borderSkipped: false, // To make it look like a timeline bar
+                        backgroundColor: experienceForChart.map((_, i) => colors[i % colors.length]),
+                        borderColor: experienceForChart.map((_, i) => borderColors[i % borderColors.length]),
+                        borderWidth: 2,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.8
                     }]
                 },
                 options: {
@@ -648,20 +684,26 @@
                         x: {
                             title: {
                                 display: true,
-                                text: 'Years (Relative to Earliest Start Date in Resume)'
+                                text: 'Years (Relative to Earliest Start)',
+                                font: { size: 14, weight: 'bold' }
                             },
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(203, 213, 225, 0.3)' // slate-300 with opacity
+                                color: 'rgba(203, 213, 225, 0.2)',
+                                borderColor: 'rgba(14, 165, 233, 1)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return earliestStartDate.getFullYear() + value;
+                                }
                             }
                         },
                         y: {
-                            grid: {
-                                display: false
-                            },
+                            grid: { display: false },
                             ticks: {
                                 autoSkip: false,
-                                callback: function(value, index, values) {
+                                font: { size: 12 },
+                                callback: function(value, index) {
                                     const label = this.getLabelForValue(value);
                                     return label.length > 35 ? label.substring(0, 32) + '...' : label;
                                 }
@@ -669,19 +711,34 @@
                         }
                     },
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 12 },
+                            padding: 12,
                             callbacks: {
+                                title: function(context) {
+                                    return experienceForChart[context[0].dataIndex].company;
+                                },
                                 label: function(context) {
-                                    const jobIndex = context.dataIndex;
-                                    const job = experienceForChart[jobIndex];
-                                    const duration = context.dataset.data[jobIndex][1] - context.dataset.data[jobIndex][0];
-                                    return `${job.company}: ${job.dates} (Approx. ${duration.toFixed(1)} years)`;
+                                    const job = experienceForChart[context.dataIndex];
+                                    const duration = context.dataset.data[context.dataIndex][1] - context.dataset.data[context.dataIndex][0];
+                                    const startYear = parseDate(job.dates.split('–')[0].trim()).getFullYear();
+                                    const endYear = job.dates.includes('Current') ? 'Present' : parseDate(job.dates.split('–')[1].trim()).getFullYear();
+                                    return [
+                                        `Role: ${job.title}`,
+                                        `Period: ${job.dates}`,
+                                        `Duration: ${duration.toFixed(1)} years`,
+                                        `Location: ${job.location}`
+                                    ];
                                 }
                             }
                         }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
                     }
                 }
             });
@@ -689,18 +746,14 @@
 
         function parseDate(dateString) {
             if (!dateString) return null;
-            // Simple parser for "Month Year" format, e.g., "June 2024" or "Dec 2019"
             const parts = dateString.split(' ');
-            if (parts.length !== 2) return null; // Invalid format
-            
+            if (parts.length !== 2) return null;
             const monthNames = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-            const month = monthNames.indexOf(parts[0].toLowerCase().substring(0,3));
+            const month = monthNames.indexOf(parts[0].toLowerCase().substring(0, 3));
             const year = parseInt(parts[1]);
-
             if (month === -1 || isNaN(year)) return null;
-            return new Date(year, month, 1); // Day is set to 1 for consistency
+            return new Date(year, month, 1);
         }
-
     </script>
 </body>
 </html>
