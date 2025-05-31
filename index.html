@@ -229,15 +229,10 @@
             },
             summary: "Highly accomplished and results-oriented Software Engineering Manager with 14 years of progressive experience in leading, managing, and delivering large-scale, cloud-native, and distributed software solutions. Proven ability to drive strategic technical roadmaps, foster high-performance teams, and translate complex technical concepts into actionable business strategies. Expert in Object-Oriented Programming (Java, Spring Boot, RESTful APIs), Microservices architecture, and Agile methodologies. Passionate about building secure, scalable, and user-centric solutions across E-Commerce, Personalization, IoT, and Supply Chain domains, aligning with Mastercard's commitment to secure, simple, and accessible digital payments.",
             skills: [
-                { category: "Backend", items: [
-                    '<span class="font-bold text-sky-700">Java 11 (Advanced)</span>',
-                    '<span class="font-bold text-sky-700">Python 3</span>',
-                    '<span class="font-bold text-sky-700">Node 20</span>',
-                    "Spring Boot"
-                ] },
-                { category: "APIs & Architecture", items: ["Microservices", "REST", "GraphQL", "API Gateways", "OAuth 2.0", "mTLS", "Protobuf", "Caching", "MuleSoft", "Workato"] },
+                { category: "Backend", items: ["Java 11 (Advanced)", "Python 3", "Node 20", "Spring Boot", "NestJS"] },
+                { category: "APIs & Architecture", items: ["Microservices", "REST", "GraphQL", "API Gateways", "OAuth 2.0", "mTLS", "Protobuf", "Caching"] },
                 { category: "Frontend", items: ["React", "Typescript", "Vue"] },
-                { category: "Middleware", items: ["NestJS"] },
+                { category: "Middleware", items: ["MuleSoft", "Workato"] },
                 { category: "Cloud Platforms (Advanced)", items: ["AWS", "GCP", "Azure"] },
                 { category: "Databases", items: ["Relational (Postgres, MySQL, Oracle)", "NoSQL (Cassandra, MongoDB)", "Analytical (Redshift)"] },
                 { category: "Big Data & Streaming", items: ["Spark", "Kafka", "AMQP", "MQTT", "Airflow", "RabbitMQ", "HUDI"] },
@@ -451,6 +446,13 @@
                 skillCategory.items.forEach(item => {
                     const skillBadge = document.createElement('span');
                     skillBadge.className = 'skill-badge bg-sky-100 text-sky-700 px-4 py-2 rounded-full text-sm font-medium shadow-sm';
+                    
+                    // Highlight specific backend technologies
+                    if (skillCategory.category === "Backend" && 
+                        ["Java 11 (Advanced)", "Python 3", "Node 20"].includes(item)) {
+                        skillBadge.className += ' font-bold bg-sky-200';
+                    }
+                    
                     skillBadge.textContent = item;
                     itemsDiv.appendChild(skillBadge);
                 });
